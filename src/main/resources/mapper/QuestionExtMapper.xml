@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wz.community.mapper.QuestionExtMapper">
+    <resultMap id="BaseResultMap" type="com.wz.community.model.Question">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+            <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="gmt_create" javaType="java.lang.Long" jdbcType="BIGINT" />
+            <arg column="gmt_modified" javaType="java.lang.Long" jdbcType="BIGINT" />
+            <arg column="creator" javaType="java.lang.Long" jdbcType="BIGINT" />
+            <arg column="comment_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="view_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="like_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="tag" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </constructor>
+    </resultMap>
+    <!--增加阅读量-->
+    <update id="increaseViewCount" parameterType="com.wz.community.model.Question">
+    update question
+    set
+    view_count = view_count + #{viewCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <!--增加评论数-->
+    <update id="increaseCommentCount" parameterType="com.wz.community.model.Question">
+    update question
+    set
+    comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByTag" parameterType="com.wz.community.model.Question" resultMap="BaseResultMap">
+        select *
+        from question
+        where id != #{id} and tag regexp #{tag}
+    </select>
+</mapper>
